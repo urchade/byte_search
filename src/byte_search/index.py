@@ -2,7 +2,7 @@ import re
 import string
 import torch
 from tqdm import tqdm
-from model import CharEmbedder
+from .model import CharEmbedder
 
 
 def load_index(path):
@@ -11,7 +11,7 @@ def load_index(path):
 
 class SearchIndex(object):
     
-    def __init__(self, text_list, word_tokenizer=None, d_model=100, max_length=15, kernels=[2, 3, 4], **args):
+    def __init__(self, text_list, device='cpu', word_tokenizer=None, d_model=100, max_length=15, kernels=[2, 3, 4], **args):
         
         self.text_list = text_list
         
@@ -26,7 +26,7 @@ class SearchIndex(object):
         for t in tqdm(text_list, desc='tokenization'):
             tokenized.append(self.word_tokenizer(t))
             
-        self.embeddings = self.model.compute_embeddings(tokenized, **args)
+        self.embeddings = self.model.compute_embeddings(tokenized, device=device, **args)
         
     def simple_tokenizer(self, txt):
         t = txt.strip().lower()
@@ -38,11 +38,8 @@ class SearchIndex(object):
     def search(self, query):
         
         query = [self.word_tokenizer(query)]
-        
         query_embedding = self.model.compute_embeddings(query, pbar=False, batch_size=1, device='cpu')
-        
         score = self.embeddings @ query_embedding.transpose(1, 2)
-        
         # max sum
         maxsum = score.max(-2).values.sum(-1)
         
@@ -51,7 +48,6 @@ class SearchIndex(object):
     def show_topk(self, query, k=10):
         
         res = self.search(query)[:k]
-        
         for r in res:
             print(self.text_list[r])
     

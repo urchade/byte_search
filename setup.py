@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='byte_search',
-    version='0.1.2',
+    version='0.5.1',
     author='Urchade Zaratiana',
     author_email='urchade.zaratiana@gmail.com',
     packages=['byte_search'],
@@ -10,4 +10,5 @@ setup(
     license='LICENSE.txt',
     description='Fast lexical search',
     long_description=open('README.md').read(),
+    package_dir={'': 'src/'}
 )
