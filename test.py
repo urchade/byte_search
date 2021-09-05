@@ -1,0 +1,1 @@
+from byte_search.index import SearchIndex
