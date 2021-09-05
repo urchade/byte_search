@@ -1,4 +1,5 @@
-README.txt
+LICENSE.txt
+README.md
 setup.py
 byte_search.egg-info/PKG-INFO
 byte_search.egg-info/SOURCES.txt
