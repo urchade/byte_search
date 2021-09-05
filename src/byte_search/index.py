@@ -39,7 +39,7 @@ class SearchIndex(object):
         self.embeddings = self.model.compute_embeddings(tokenized, device=device, **args)
         
     def simple_tokenizer(self, txt):
-        """[summary]
+        """simple tokenization function
 
         Args:
             txt (str): string sequence
@@ -54,7 +54,7 @@ class SearchIndex(object):
         return t.split()
         
     def search(self, query):
-        """[summary]
+        """Return most relevant idx
 
         Args:
             query (str): query
@@ -71,7 +71,7 @@ class SearchIndex(object):
         return torch.argsort(maxsum, dim=0, descending=True).numpy()
     
     def show_topk(self, query, k=10):
-        """[summary]
+        """Show top k results
 
         Args:
             query (str): query
