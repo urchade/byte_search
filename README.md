@@ -17,7 +17,6 @@ docs = [
 
 my_index = SearchIndex(text_list=docs, device='cpu', d_model=64)
 
-
 my_index.show_topk(query='machine translation', k=1)
 
 ```
