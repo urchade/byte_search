@@ -1,4 +1,4 @@
-# byte_search
+# byte-search
 
 ## Installation
 ```bash
