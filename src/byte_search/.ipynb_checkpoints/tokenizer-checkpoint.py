@@ -9,36 +9,15 @@ class ByteCharEncoder(object):
         vocab = None
                 
     def encode_token(self, token):
-        """Encode token
-
-        Args:
-            token (str): a string
-
-        Returns:
-            torch.LongTensor: encoded token
-        """
+        """encode a single token: str"""
         return torch.LongTensor(list(token.encode("utf-8"))) + 1 # 0 for padding
     
     def encode_sequence(self, sequence):
-        """encode a tokenized sequence
-
-        Args:
-            sequence (list[str]): tokenized sequence
-
-        Returns:
-            list: contains all encoded tokens
-        """
+        """encode a sequence of token: [str] or str"""
         return [self.encode_token(token) for token in sequence]
     
     def encode_batch(self, batch):
-        """encode a batch of tokenized sequence
-
-        Args:
-            batch (list[list[str]]): batch of tokenized sequence
-
-        Returns:
-            torch.LongTensor: contains the encoded (padded) batches [B, num_words, num_chars]
-        """
+        """encode a batch: [[str]] or [str]"""
         
         lengths = []
         batch_tokens = []
@@ -54,15 +33,6 @@ class ByteCharEncoder(object):
         return pad_sequence(list_seq, batch_first=True)
     
     def encode_batch_with_length(self, batch, length=15):
-        """encode a batch of tokenized sequence given a max char length
-
-        Args:
-            batch (list[list[str]]): batch of tokenized sequence
-            length (int, optional): Max char length. Defaults to 15.
-
-        Returns:
-            torch.LongTensor: contains the encoded (padded) batches [B, num_words, length]
-        """
         
         lengths = []
         batch_tokens = []

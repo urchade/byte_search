@@ -4,6 +4,12 @@ from torch import nn
 class CharCNN(nn.Module):
     
     def __init__(self, d_model, kernels=[2, 3, 4]):
+        """1DCNN layer with max pooling
+
+        Args:
+            d_model (int): embedding dimension
+            kernels (list, optional): kernel sizes for convolution. Defaults to [2, 3, 4].
+        """
         
         super().__init__()
                 

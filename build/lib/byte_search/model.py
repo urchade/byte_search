@@ -10,7 +10,14 @@ from functools import partial
 
 class CharEmbedder(nn.Module):
     
-    def __init__(self, hidden_size, max_length=15, kernels=[2, 3, 4]):
+    def __init__(self, hidden_size, max_length=20, kernels=[2, 3, 4]):
+        """Embedding model
+
+        Args:
+            hidden_size (int): embedding hidden size
+            max_length (int, optional): character max length. Defaults to 20.
+            kernels (list, optional): kernel sizes for convolution. Defaults to [2, 3, 4].
+        """
         
         super().__init__()
         
@@ -22,7 +29,14 @@ class CharEmbedder(nn.Module):
         self.max_length = max_length
         
     def forward(self, indexes):
-        
+        """forward pass
+
+        Args:
+            indexes (torch.LongTensor): input ids of dim [B, num_words, num_chars]
+
+        Returns:
+            torch.Tensor: embeddings [B, num_words, hidden_size]
+        """
         x = self.embedding(indexes) # [B, W, C, H]
         B, W, C, H = x.size()
         x = x.view(B * W, C, H) # [B * W, C, H]
@@ -32,14 +46,40 @@ class CharEmbedder(nn.Module):
         return F.normalize(x, dim=2)
         
     def direct_forward(self, list_tokens):
+        """Embed a list of tokenized sequences [['this', 'is'], ['I', 'am]]
+
+        Args:
+            list_tokens (list[list[str]]): list of tokenized sequences
+
+        Returns:
+            [torch.Tensor]: embeddings [B, num_words, hidden_size]
+        """
         indexes = self.char_transformer.encode_batch_with_length(list_tokens, length=self.max_length) # [B, W, C]
         return self.forward(indexes)
     
     def create_dataloader(self, list_tokens, **kwargs):
+        """Create a dataloader
+
+        Args:
+            list_tokens (list[list[str]]): list of tokenized sequences
+
+        Returns:
+            [torch.data.DataLoader]: returns a dataloader
+        """
         return DataLoader(list_tokens, collate_fn=partial(self.char_transformer.encode_batch_with_length, length=self.max_length), **kwargs)
     
     @torch.no_grad()
     def compute_embeddings(self, list_tokens, pbar=True, device='cpu', **kwargs):
+        """Compute embeddings given a list of tokenized sequences
+
+        Args:
+            list_tokens (list[list[str]]): list of tokenized sequences
+            pbar (bool, optional): use progress bar. Defaults to True.
+            device (str, optional): 'cpu' or 'cuda'. Defaults to 'cpu'.
+
+        Returns:
+            torch.Tensor: embeddings [B, num_words, hidden_size]
+        """
         
         self.to(device)
         
