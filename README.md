@@ -2,7 +2,7 @@
 
 ## Installation
 ```bash
-pip install byte_search
+pip install byte-search
 ```
 
 ## Usage
