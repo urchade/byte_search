@@ -1,3 +1,4 @@
+LICENSE.txt
 README.md
 setup.py
 src/byte_search/__init__.py
