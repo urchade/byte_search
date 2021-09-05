@@ -1,5 +1,10 @@
 # byte_search
 
+## Installation
+```bash
+pip install byte_search
+```
+
 ## Usage
 ```python
 from byte_search.index import SearchIndex
