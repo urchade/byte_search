@@ -93,9 +93,7 @@ class CharEmbedder(nn.Module):
         for x in loader:
             
             x = x.to(device)
-            
             e = self.forward(x)
-            
             embeddings.append(e.cpu())
             
         return pad_sequence([i for k in embeddings for i in k], batch_first=True)

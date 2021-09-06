@@ -12,6 +12,8 @@ class CharCNN(nn.Module):
         """
         
         super().__init__()
+
+        self.pool = nn.AdaptiveMaxPool1d((1))
                 
         self.convs = nn.ModuleList()
         
@@ -30,9 +32,9 @@ class CharCNN(nn.Module):
         for conv in self.convs:
             
             convolved = conv(x)
-            
-            convolved, _ = torch.max(convolved, dim=-1)
-                                    
+
+            convolved = self.pool(convolved).squeeze(-1)
+                                                
             convs.append(convolved)
         
         convs = torch.stack(convs, dim=0)

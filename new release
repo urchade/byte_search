@@ -3,3 +3,5 @@ python setup.py sdist
 python setup.py bdist_wheel
 twine check dist/*
 python3 -m build
+
+python3 -m twine upload --repository pypi dist/*
