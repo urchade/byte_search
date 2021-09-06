@@ -8,9 +8,23 @@ from .cnn import CharCNN
 from .tokenizer import ByteCharEncoder
 from functools import partial
 
+class BiAvg(nn.AvgPool1d):
+    
+    def __init__(self):
+        super().__init__(self, kernel_size=2, stride=1, padding=1)
+
+    def forward(self, x):
+        
+        x = x.transpose(1, 2)
+        
+        x = super().forward(x)
+        
+        return x.transpose(1, 2)
+
+
 class CharEmbedder(nn.Module):
     
-    def __init__(self, hidden_size, max_length=20, kernels=[2, 3, 4]):
+    def __init__(self, hidden_size, max_length=20, kernels=[2, 3, 4], bigram=False):
         """Embedding model
 
         Args:
@@ -25,6 +39,11 @@ class CharEmbedder(nn.Module):
         self.char_transformer = ByteCharEncoder()
         self.embedding = nn.Embedding(256 + 1, hidden_size, padding_idx=0)
         self.cnn = CharCNN(hidden_size, kernels=kernels)
+
+        self.bigram = bigram
+
+        if bigram:
+            self.b_pool = BiAvg()
                 
         self.max_length = max_length
         
@@ -42,6 +61,10 @@ class CharEmbedder(nn.Module):
         x = x.view(B * W, C, H) # [B * W, C, H]
         x = self.cnn(x) # [B * W, H]
         x = x.view(B, W, H)
+
+        if self.bigram:
+            x_pool = self.b_pool(x)
+            x = torch.cat([x, x_pool], dim=1)
                 
         return F.normalize(x, dim=2)
         

@@ -11,7 +11,7 @@ def load_index(path):
 
 class SearchIndex(object):
     
-    def __init__(self, text_list, device='cpu', word_tokenizer=None, d_model=64, max_length=20, kernels=[3, 5], **args):
+    def __init__(self, text_list, device='cpu', word_tokenizer=None, d_model=64, max_length=20, kernels=[3, 5], bigram=False, **args):
         """Compute embeddings given a list of sequences
 
         Args:
@@ -30,7 +30,7 @@ class SearchIndex(object):
             
         self.word_tokenizer = word_tokenizer
         
-        self.model = CharEmbedder(d_model, kernels=kernels, max_length=max_length)
+        self.model = CharEmbedder(d_model, kernels=kernels, max_length=max_length, bigram=bigram)
         
         tokenized = []
         for t in tqdm(text_list, desc='tokenization'):
