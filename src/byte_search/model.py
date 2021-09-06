@@ -9,9 +9,6 @@ from .tokenizer import ByteCharEncoder
 from functools import partial
 
 class BiAvg(nn.AvgPool1d):
-    
-    def __init__(self):
-        super().__init__(self, kernel_size=2, stride=1, padding=1)
 
     def forward(self, x):
         
@@ -43,7 +40,7 @@ class CharEmbedder(nn.Module):
         self.bigram = bigram
 
         if bigram:
-            self.b_pool = BiAvg()
+            self.b_pool = BiAvg(kernel_size=2, stride=1, padding=1)
                 
         self.max_length = max_length
         
