@@ -1,7 +1,9 @@
 import re
 import string
+
 import torch
 from tqdm import tqdm
+
 from .model import CharEmbedder
 
 
@@ -10,7 +12,7 @@ def load_index(path):
 
 
 class SearchIndex(object):
-    
+
     def __init__(self, text_list, device='cpu', word_tokenizer=None, d_model=64, max_length=20, kernels=[3, 5], bigram=False, **args):
         """Compute embeddings given a list of sequences
 
@@ -22,22 +24,24 @@ class SearchIndex(object):
             length (int, optional): Max char length. Defaults to 15.
             kernels (list, optional): [description]. Defaults to [3, 5].
         """
-        
+
         self.text_list = text_list
-        
+
         if word_tokenizer is None:
             word_tokenizer = self.simple_tokenizer
-            
+
         self.word_tokenizer = word_tokenizer
-        
-        self.model = CharEmbedder(d_model, kernels=kernels, max_length=max_length, bigram=bigram)
-        
+
+        self.model = CharEmbedder(
+            d_model, kernels=kernels, max_length=max_length, bigram=bigram)
+
         tokenized = []
         for t in tqdm(text_list, desc='tokenization'):
             tokenized.append(self.word_tokenizer(t))
-            
-        self.embeddings = self.model.compute_embeddings(tokenized, device=device, **args)
-        
+
+        self.embeddings = self.model.compute_embeddings(
+            tokenized, device=device, **args)
+
     def simple_tokenizer(self, txt):
         """simple tokenization function
 
@@ -48,11 +52,11 @@ class SearchIndex(object):
             list[str]: list of tokens
         """
         t = txt.strip().lower()
-        t = re.sub(r'([%s])' % re.escape(string.punctuation), r' \1 ', t) 
-        t = re.sub(r'\\.', r' ', t) 
+        t = re.sub(r'([%s])' % re.escape(string.punctuation), r' \1 ', t)
+        t = re.sub(r'\\.', r' ', t)
         t = re.sub(r'\s+', r' ', t)
         return t.split()
-        
+
     def search(self, query):
         """Return most relevant idx
 
@@ -63,13 +67,14 @@ class SearchIndex(object):
             list[int]: sort result ids
         """
         query = [self.word_tokenizer(query)]
-        query_embedding = self.model.compute_embeddings(query, pbar=False, batch_size=1, device='cpu')
+        query_embedding = self.model.compute_embeddings(
+            query, pbar=False, batch_size=1, device='cpu')
         score = self.embeddings @ query_embedding.transpose(1, 2)
         # max sum
         maxsum = score.max(-2).values.sum(-1)
-        
+
         return torch.argsort(maxsum, dim=0, descending=True).numpy()
-    
+
     def show_topk(self, query, k=10):
         """Show top k results
 
@@ -77,11 +82,11 @@ class SearchIndex(object):
             query (str): query
             k (int, optional): top k result to show. Defaults to 10.
         """
-        
+
         res = self.search(query)[:k]
         for r in res:
             print(self.text_list[r])
-    
+
     def save(self, path):
         """Save index
 

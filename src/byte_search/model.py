@@ -1,12 +1,15 @@
+from functools import partial
+
 import torch
+import torch.nn.functional as F
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
-import torch.nn.functional as F
 from tqdm import tqdm
+
 from .cnn import CharCNN
 from .tokenizer import ByteCharEncoder
-from functools import partial
+
 
 class BiAvg(nn.AvgPool1d):
 

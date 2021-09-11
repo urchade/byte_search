@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='byte_search',
-    version='0.5.8',
+    version='0.5.9',
     author='Urchade Zaratiana',
     author_email='urchade.zaratiana@gmail.com',
     packages=['byte_search'],
