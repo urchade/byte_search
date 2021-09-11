@@ -24,6 +24,14 @@ class CharCNN(nn.Module):
             self.convs.append(cv)
                                                 
     def forward(self, x):
+        """Forward function
+
+        Args:
+            x (torch.Tensor): [batch_size, length, hidden_size]
+
+        Returns:
+            torch.Tensor: [batch_size, hidden_size]
+        """
         
         x = x.transpose(1, 2)
         
