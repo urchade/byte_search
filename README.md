@@ -20,3 +20,13 @@ my_index = SearchIndex(text_list=docs, device='cpu', d_model=64)
 my_index.show_topk(query='machine translation', k=1)
 
 ```
+
+## Reference
+
+```bibtex
+@article{zaratiana2021contrastive,
+  title={Contrastive String Representation Learning Using Synthetic Data},
+  author={Zaratiana, Urchade},
+  journal={https://www.researchgate.net/publication/355146533},
+  year={2021}
+}
