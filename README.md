@@ -24,9 +24,11 @@ my_index.show_topk(query='machine translation', k=1)
 ## Reference
 
 ```bibtex
-@article{zaratiana2021contrastive,
-  title={Contrastive String Representation Learning Using Synthetic Data},
-  author={Zaratiana, Urchade},
-  journal={https://www.researchgate.net/publication/355146533},
-  year={2021}
+@misc{zaratiana2021contrastive,
+      title={Contrastive String Representation Learning using Synthetic Data}, 
+      author={Urchade Zaratiana},
+      year={2021},
+      eprint={2110.04217},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
 }
